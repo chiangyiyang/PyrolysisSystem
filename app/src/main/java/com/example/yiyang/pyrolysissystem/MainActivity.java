@@ -33,14 +33,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-//                Toast.makeText(this, "Settings was selected!",Toast.LENGTH_LONG).show();
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
 
             case R.id.action_connect:
-//                Toast.makeText(this, "Connection was selected!",Toast.LENGTH_LONG).show();
                 if (isConnect) {
                     //close serial port
                     item.setIcon(getDrawable(R.drawable.ic_action_play));
