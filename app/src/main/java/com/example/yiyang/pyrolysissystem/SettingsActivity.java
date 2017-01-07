@@ -90,7 +90,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.settings_toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.heater_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

@@ -52,7 +52,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnH1"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="onClick" />
 
         </LinearLayout>
 
@@ -78,7 +79,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnH2"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="onClick" />
 
         </LinearLayout>
 
@@ -104,7 +106,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnH3"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="onClick" />
 
         </LinearLayout>
 
@@ -130,7 +133,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnH4"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="onClick" />
 
         </LinearLayout>
 
@@ -156,7 +160,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnH5"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="onClick" />
 
         </LinearLayout>
 
@@ -236,7 +241,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnM1"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="onClick" />
 
         </LinearLayout>
 
@@ -262,7 +268,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnM2"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="onClick" />
 
         </LinearLayout>
 
