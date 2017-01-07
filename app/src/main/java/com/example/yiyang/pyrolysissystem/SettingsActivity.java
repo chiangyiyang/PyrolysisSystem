@@ -144,14 +144,6 @@ public class SettingsActivity extends AppCompatActivity {
                 }
 
                 final UsbSerialPort port = mEntries.get(position);
-//                showMainActivity(port);
-//                finishActivity(MainActivity.REQUEST_SERIAL_PORT);
-
-//                MainActivity.setSerialPort(port);
-//
-//                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-//                setResult(RESULT_OK, intent);
-//                finish();
 
                 if (mUsbManager.hasPermission(port.getDriver().getDevice())) {
                     MainActivity.setSerialPort(port);
@@ -267,8 +259,5 @@ public class SettingsActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.INVISIBLE);
     }
 
-//    private void showMainActivity(UsbSerialPort port) {
-//        MainActivity.setSerialPort(port);
-//    }
 
 }

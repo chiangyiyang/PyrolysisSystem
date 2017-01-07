@@ -25,6 +25,7 @@ public class HeaterActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();
         mMeterId = intent.getStringExtra("meter");
+        ((TextView) findViewById(R.id.txtDeviceName)).setText(mMeterId);
     }
 
     @Override

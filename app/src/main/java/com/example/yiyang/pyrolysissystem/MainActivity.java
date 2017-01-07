@@ -71,31 +71,7 @@ public class MainActivity extends AppCompatActivity
                 }
             };
 
-
-    private static final String ACTION_USB_PERMISSION =
-            "com.example.yiyang.pyrolysissystem.USB_PERMISSION";
-
-//    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
-//        public void onReceive(Context context, Intent intent) {
-//            String action = intent.getAction();
-//            if (ACTION_USB_PERMISSION.equals(action)) {
-//                synchronized (this) {
-//                    UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-//
-//                    if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
-//                        if (device != null) {
-//                            //call method to set up device communication
-//                        }
-//                    } else {
-//                        Log.d(TAG, "permission denied for device " + device);
-//                    }
-//                }
-//            }
-//        }
-//    };
-
     private UsbManager mUsbManager;
-    private PendingIntent mPermissionIntent;
     private StringBuilder mBuffer = new StringBuilder();
     private String mMsgToSend;
 
@@ -105,11 +81,6 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-//            if (requestCode == REQUEST_SERIAL_PORT) {
-////                Toast.makeText(this, "Settings Back", Toast.LENGTH_LONG).show();
-//                Log.d(TAG, "Navigate back from SettingsActivity");
-//            }
-
             switch (requestCode) {
                 case REQUEST_SERIAL_PORT:
                     Log.d(TAG, "Navigate back from SettingsActivity");
@@ -130,9 +101,7 @@ public class MainActivity extends AppCompatActivity
         if (sPort == null) {
             mTitleTextView.setText("No serial device.");
         } else {
-            final UsbManager usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
-
-            UsbDeviceConnection connection = usbManager.openDevice(sPort.getDriver().getDevice());
+            UsbDeviceConnection connection = mUsbManager.openDevice(sPort.getDriver().getDevice());
 
             if (connection == null) {
                 mTitleTextView.setText("Opening device failed");
@@ -173,30 +142,8 @@ public class MainActivity extends AppCompatActivity
 
 
         mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
-        mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
-
-//        Button btnH1 = (Button) findViewById(R.id.btnH1);
-//        btnH1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                mSerialIoManager.writeAsync("Hi".getBytes(StandardCharsets.US_ASCII));
-//
-//                Intent intent = new Intent();
-//                intent.setClass(MainActivity.this, HeaterActivity.class);
-//                startActivityForResult(intent, REQUEST_HEATER_SETTINGS);
-//
-//            }
-//        });
-
-//        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
-//        registerReceiver(mUsbReceiver, filter);
     }
 
-//    @Override
-//    protected void onStop() {
-//        unregisterReceiver(mUsbReceiver);
-//        super.onStop();
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -206,19 +153,6 @@ public class MainActivity extends AppCompatActivity
                 intent.setClass(MainActivity.this, SettingsActivity.class);
                 startActivityForResult(intent, REQUEST_SERIAL_PORT);
                 return true;
-
-//            case R.id.action_connect:
-//                if (isConnect) {
-//                    //close serial port
-//                    item.setIcon(getDrawable(R.drawable.ic_action_play));
-//                } else {
-//                    //open serial port
-//                    item.setIcon(getDrawable(R.drawable.ic_action_stop));
-//
-//                }
-//                isConnect = !isConnect;
-//
-//                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -233,13 +167,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-
-//    void showStatus(TextView theTextView, String theLabel, boolean theValue) {
-//        String msg = theLabel + ": " + (theValue ? "enabled" : "disabled") + "\n";
-//        theTextView.append(msg);
-//    }
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -249,7 +176,6 @@ public class MainActivity extends AppCompatActivity
                 if (!isConnect) openSerialPort();
 
             } else {
-//                mUsbManager.requestPermission(sPort.getDriver().getDevice(), mPermissionIntent);
                 Toast.makeText(this, "No permission for using " + sPort.getDriver().getDevice().toString(), Toast.LENGTH_LONG).show();
             }
         }
@@ -323,7 +249,6 @@ public class MainActivity extends AppCompatActivity
             else {
                 String msg = mBuffer.substring(0, end);
                 mBuffer.delete(0, end + MsgSeparator.length());
-//                Log.i("Test", msg);
                 parseMessage(msg);
             }
         }
