@@ -1,15 +1,13 @@
 package com.example.yiyang.pyrolysissystem;
 
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -69,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
             };
 
 
-//    private static final String ACTION_USB_PERMISSION =
-//            "com.example.yiyang.pyrolysissystem.USB_PERMISSION";
+    private static final String ACTION_USB_PERMISSION =
+            "com.example.yiyang.pyrolysissystem.USB_PERMISSION";
 
 //    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
 //        public void onReceive(Context context, Intent intent) {
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     private UsbManager mUsbManager;
     private PendingIntent mPermissionIntent;
     private StringBuilder mBuffer = new StringBuilder();
-    ;
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -155,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
-//        mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+        mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
 
 //        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
 //        registerReceiver(mUsbReceiver, filter);
@@ -217,11 +215,24 @@ public class MainActivity extends AppCompatActivity {
             if (mUsbManager.hasPermission(device)) {
                 openSerialPort();
             } else {
-                mUsbManager.requestPermission(sPort.getDriver().getDevice(), mPermissionIntent);
+//                mUsbManager.requestPermission(sPort.getDriver().getDevice(), mPermissionIntent);
+                Toast.makeText(this, "No permission for using " + sPort.getDriver().getDevice().toString(), Toast.LENGTH_LONG).show();
             }
         }
 
         onDeviceStateChange();
+    }
+
+    @Override
+    protected void onPause() {
+        if (sPort!=null) {
+            try {
+                sPort.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        super.onPause();
     }
 
     private void stopIoManager() {

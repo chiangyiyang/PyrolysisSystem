@@ -1,7 +1,10 @@
 package com.example.yiyang.pyrolysissystem;
 
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.AsyncTask;
@@ -39,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
     private final String TAG = SettingsActivity.class.getSimpleName();
 
     private UsbManager mUsbManager;
+    private PendingIntent mPermissionIntent;
     private ListView mListView;
     private TextView mProgressBarTitle;
     private ProgressBar mProgressBar;
@@ -48,7 +52,37 @@ public class SettingsActivity extends AppCompatActivity {
 
     private static final int MESSAGE_REFRESH = 101;
     private static final long REFRESH_TIMEOUT_MILLIS = 50000;
+    private static final String ACTION_USB_PERMISSION =
+            "com.example.yiyang.pyrolysissystem.USB_PERMISSION";
+    private UsbSerialPort portForPermission;
+    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (ACTION_USB_PERMISSION.equals(action)) {
+                synchronized (this) {
+                    UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
 
+                    if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                        if (device != null) {
+                            //call method to set up device communication
+
+                            unregisterReceiver(mUsbReceiver);
+
+                            if (portForPermission == null) return;
+                            MainActivity.setSerialPort(portForPermission);
+                            portForPermission = null;
+
+                            Intent intentForMainActivity = new Intent(SettingsActivity.this, MainActivity.class);
+                            SettingsActivity.this.setResult(RESULT_OK, intentForMainActivity);
+                            finish();
+                        }
+                    } else {
+                        Log.d(TAG, "permission denied for device " + device);
+                    }
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +96,9 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+        mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+
+
         mListView = (ListView) findViewById(R.id.deviceList);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mProgressBarTitle = (TextView) findViewById(R.id.progressBarTitle);
@@ -110,11 +147,23 @@ public class SettingsActivity extends AppCompatActivity {
 //                showMainActivity(port);
 //                finishActivity(MainActivity.REQUEST_SERIAL_PORT);
 
-                MainActivity.setSerialPort(port);
+//                MainActivity.setSerialPort(port);
+//
+//                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+//                setResult(RESULT_OK, intent);
+//                finish();
 
-                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-                setResult(RESULT_OK, intent);
-                finish();
+                if (mUsbManager.hasPermission(port.getDriver().getDevice())) {
+                    MainActivity.setSerialPort(port);
+                    Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    portForPermission = port;
+                    IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+                    registerReceiver(mUsbReceiver, filter);
+                    mUsbManager.requestPermission(port.getDriver().getDevice(), mPermissionIntent);
+                }
             }
         });
 
