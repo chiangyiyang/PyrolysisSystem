@@ -2,14 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_heater"
+    android:id="@+id/activity_motor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.yiyang.pyrolysissystem.HeaterActivity">
+    tools:context="com.example.yiyang.pyrolysissystem.MotorActivity">
+
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/heater_toolbar"
@@ -37,7 +38,7 @@
                 android:layout_height="match_parent"
                 android:translationZ="5dp"
                 android:elevation="2dp"
-                android:background="@android:color/holo_red_light">
+                android:background="@android:color/holo_blue_light">
 
                 <TextView
                     android:text="DeviceName"
@@ -56,24 +57,15 @@
                 android:translationZ="5dp"
                 android:elevation="2dp">
 
-                <TextView
-                    android:text="Temperature:"
+                <Switch
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:text="123"
-                    android:ems="10"
-                    android:id="@+id/edtTemperature"
+                    android:id="@+id/swMoterOnOff"
                     android:layout_weight="1" />
 
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 
 </RelativeLayout>

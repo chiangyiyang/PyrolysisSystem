@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity
 
     public static final int REQUEST_SERIAL_PORT = 1;
     private static final int REQUEST_HEATER_SETTINGS = 2;
+    private static final int REQUEST_MOTOR_SETTINGS = 3;
 
     private final String TAG = MainActivity.class.getSimpleName();
 
@@ -90,7 +91,12 @@ public class MainActivity extends AppCompatActivity
                     Log.d(TAG, "Navigate back from HeaterActivity");
                     mMsgToSend = data.getStringExtra("msg");
                     Log.d(TAG, "Message: " + mMsgToSend);
+                    break;
 
+                case REQUEST_MOTOR_SETTINGS:
+                    Log.d(TAG, "Navigate back from MotorActivity");
+                    mMsgToSend = data.getStringExtra("msg");
+                    Log.d(TAG, "Message: " + mMsgToSend);
                     break;
             }
         }
@@ -183,7 +189,7 @@ public class MainActivity extends AppCompatActivity
         onDeviceStateChange();
 
         //delay send
-        if (mMsgToSend != null) {
+        if ((isConnect) && (mMsgToSend != null)) {
             mSerialIoManager.writeAsync(mMsgToSend.getBytes(StandardCharsets.US_ASCII));
             mMsgToSend = null;
         }
@@ -315,18 +321,22 @@ public class MainActivity extends AppCompatActivity
             case R.id.btnH2:
             case R.id.btnH3:
             case R.id.btnH4:
-            case R.id.btnH5:
-            case R.id.btnT1:
-            case R.id.btnT2:
-            case R.id.btnM1:
-            case R.id.btnM2:
-                map.get(v.getId());
-
+            case R.id.btnH5: {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, HeaterActivity.class);
                 intent.putExtra("meter", map.get(v.getId()));
                 startActivityForResult(intent, REQUEST_HEATER_SETTINGS);
-                break;
+            }
+            break;
+
+            case R.id.btnM1:
+            case R.id.btnM2: {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, MotorActivity.class);
+                intent.putExtra("meter", map.get(v.getId()));
+                startActivityForResult(intent, REQUEST_MOTOR_SETTINGS);
+            }
+            break;
 
         }
 
